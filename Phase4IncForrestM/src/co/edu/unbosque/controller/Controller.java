@@ -42,7 +42,7 @@ import javazoom.jl.player.Player;
 public class Controller implements ActionListener, Reproductor {
 
 	private Emisora emisora;
-	private View gui;
+	private View view;
 	static boolean play = false; // INICIA LA REPRODUCCION
 	static boolean stop = false; // PERMITE DETENER LA REPRODUCCION DE LA CANCION
 	static int Ndj = -1;
@@ -60,9 +60,9 @@ public class Controller implements ActionListener, Reproductor {
 
 		emisora = new Emisora();
 		emisora.getPropiedades().leerPropiedades();
-		gui = new View(this);
-		gui.setVisible(true);
-		gui.setTitle(emisora.cargaNombreVentana());
+		view = new View(this);
+		view.setVisible(true);
+		view.setTitle(emisora.cargaNombreVentana());
 		emisora.asignarDjs();
 		emisora.asignarParrillas();
 		emisora.getPersistence().leerCanciones(emisora.getDjs());
@@ -70,7 +70,7 @@ public class Controller implements ActionListener, Reproductor {
 
 		ruta = "./data/DBs/ForrestM_DB_Canciones.csv";
 
-		this.gui.getPanelReproduccion().getLstDJs().addMouseListener(new MouseAdapter() { // ACCION CUANDO HACE CLIC
+		this.view.getPanelReproduccion().getLstDJs().addMouseListener(new MouseAdapter() { // ACCION CUANDO HACE CLIC
 			public void mouseClicked(MouseEvent me) {
 				if (me.getClickCount() == 1) {
 					JList target = (JList) me.getSource();
@@ -83,16 +83,16 @@ public class Controller implements ActionListener, Reproductor {
 			}
 		});
 
-		this.gui.getPanelReproduccion().getLstParrillas().addMouseListener(new MouseAdapter() { // ACCION CUANDO HACE UN
+		this.view.getPanelReproduccion().getLstParrillas().addMouseListener(new MouseAdapter() { // ACCION CUANDO HACE UN
 																								// CLIC
 			public void mouseClicked(MouseEvent me) {
 				if (me.getClickCount() == 1) {
 					JList target = (JList) me.getSource();
 					int index = target.locationToIndex(me.getPoint());
-					if (index >= 0 && gui.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0) { // CARGA LOS
+					if (index >= 0 && view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0) { // CARGA LOS
 																										// DATOS
 																										// SELECCIONADOS
-						cargarCanciones(gui.getPanelReproduccion().getLstDJs().getSelectedIndex(), index); // ACTUALIZA
+						cargarCanciones(view.getPanelReproduccion().getLstDJs().getSelectedIndex(), index); // ACTUALIZA
 																											// LA LISTA
 																											// DE
 																											// CANCIONES
@@ -105,7 +105,7 @@ public class Controller implements ActionListener, Reproductor {
 		});
 
 		// ACTUALIZA DATOS DE CANCIONES
-		this.gui.getPanelReproduccion().getLstCanciones().addMouseListener(new MouseAdapter() { // ACCION CUANDO HACE
+		this.view.getPanelReproduccion().getLstCanciones().addMouseListener(new MouseAdapter() { // ACCION CUANDO HACE
 																								// CLIC
 			public void mouseClicked(MouseEvent me) {
 				if (me.getClickCount() == 1) {
@@ -130,7 +130,7 @@ public class Controller implements ActionListener, Reproductor {
 		for (int i = 0; i < emisora.getDjs().size(); i++) {
 			listModel.addElement(emisora.getDjs().get(i).getNombre());
 		}
-		gui.getPanelReproduccion().getLstDJs().setModel(listModel);
+		view.getPanelReproduccion().getLstDJs().setModel(listModel);
 
 	}
 
@@ -143,20 +143,20 @@ public class Controller implements ActionListener, Reproductor {
 
 	private void actualizaCancion(int index) {
 		// TODO Auto-generated method stub
-		if (index >= 0 && gui.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
-				&& gui.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0) { // CARGA LOS DATOS DEL
+		if (index >= 0 && view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
+				&& view.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0) { // CARGA LOS DATOS DEL
 																							// SELECCIONADO
-			Song c = emisora.getDjs().get(gui.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
-					.get(gui.getPanelReproduccion().getLstParrillas().getSelectedIndex()).getCanciones()
-					.get(gui.getPanelReproduccion().getLstCanciones().getSelectedIndex());
-			gui.getPanelReproduccion().getTxtArtista().setText(c.artista.getNombre());
-			gui.getPanelReproduccion().getTxtTitulo().setText(c.titulo);
-			gui.getPanelReproduccion().getCbbGeneros().setSelectedIndex(c.getGenero());
-			gui.getPanelReproduccion().getTxtDuracion().setText(c.durString());
-			gui.getPanelReproduccion().getTxtRuta().setText(c.ruta);
-			gui.getPanelReproduccion().getTxtLetra().setText(c.letra);
-			gui.getPanelReproduccion().getTxtLirica().setText(""); // LIMPIA EL ESPACIO DE LA LETRA
-			gui.cambiarImagen(c.getTitulo(), gui.getPanelReproduccion().getImagenCan()); // CARGA LA IMAGEN
+			Song c = emisora.getDjs().get(view.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
+					.get(view.getPanelReproduccion().getLstParrillas().getSelectedIndex()).getCanciones()
+					.get(view.getPanelReproduccion().getLstCanciones().getSelectedIndex());
+			view.getPanelReproduccion().getTxtArtista().setText(c.artista.getNombre());
+			view.getPanelReproduccion().getTxtTitulo().setText(c.titulo);
+			view.getPanelReproduccion().getCbbGeneros().setSelectedIndex(c.getGenero());
+			view.getPanelReproduccion().getTxtDuracion().setText(c.durString());
+			view.getPanelReproduccion().getTxtRuta().setText(c.ruta);
+			view.getPanelReproduccion().getTxtLetra().setText(c.letra);
+			view.getPanelReproduccion().getTxtLirica().setText(""); // LIMPIA EL ESPACIO DE LA LETRA
+			view.cambiarImagen(c.getTitulo(), view.getPanelReproduccion().getImagenCan()); // CARGA LA IMAGEN
 
 			try {
 				System.out.println("Leyendo letra de Cancion seleccionada " + c.letra);
@@ -167,7 +167,7 @@ public class Controller implements ActionListener, Reproductor {
 					line += reader.readLine() + "\n";
 				}
 				reader.close(); // CIERRA EL ARCHIVO
-				gui.getPanelReproduccion().getTxtLirica().setText(line);
+				view.getPanelReproduccion().getTxtLirica().setText(line);
 			} catch (Exception e) {
 			}
 		}
@@ -187,8 +187,8 @@ public class Controller implements ActionListener, Reproductor {
 		for (int i = 0; i < emisora.getDjs().get(a).getParrrillas().size(); i++) {
 			listModel.addElement(emisora.getDjs().get(a).getParrrillas().get(i).getNombre());
 		}
-		gui.getPanelReproduccion().getLstParrillas().setModel(listModel);
-		gui.getPanelReproduccion().getLstCanciones().setModel(new DefaultListModel<String>()); // LIMPIA LISTA DE
+		view.getPanelReproduccion().getLstParrillas().setModel(listModel);
+		view.getPanelReproduccion().getLstCanciones().setModel(new DefaultListModel<String>()); // LIMPIA LISTA DE
 																								// CANCIONES
 	}
 
@@ -209,8 +209,8 @@ public class Controller implements ActionListener, Reproductor {
 			listModel.addElement(emisora.getDjs().get(m).getParrrillas().get(n).getCanciones().get(i).toString());
 
 		}
-		gui.getPanelReproduccion().getLstCanciones().setModel(listModel);
-		gui.getPanelReproduccion().getLblTotal().setText(emisora.getDjs().get(m).getParrrillas().get(n).getDuracion());
+		view.getPanelReproduccion().getLstCanciones().setModel(listModel);
+		view.getPanelReproduccion().getLblTotal().setText(emisora.getDjs().get(m).getParrrillas().get(n).getDuracion());
 
 	}
 
@@ -223,168 +223,168 @@ public class Controller implements ActionListener, Reproductor {
 		String command = e.getActionCommand();
 
 //MENSAJE PARA EL USUARIO CUANDO SELECCIONE EL MODO DE TRANSMISION		
-		if (command.contentEquals(gui.getPanelReproduccion().Modo)) {
+		if (command.contentEquals(view.getPanelReproduccion().Modo)) {
 
-			if (gui.getPanelReproduccion().getCbbModo().getSelectedIndex() == 0) {
-				gui.imprimirMensaje("ForestM Trasmitiendo en frecuencia AM ", "Modo transmisión");
+			if (view.getPanelReproduccion().getCbbModo().getSelectedIndex() == 0) {
+				view.imprimirMensaje("ForestM Trasmitiendo en frecuencia AM ", "Modo transmisión");
 
-				gui.getPanelReproduccion().getModoStre().setVisible(false);
-				gui.getPanelReproduccion().getModoAM().setVisible(true);
-				gui.getPanelReproduccion().getModoFM().setVisible(false);
-				gui.getPanelReproduccion().getModoAll().setVisible(false);
-				gui.getPanelReproduccion().repaint();
+				view.getPanelReproduccion().getModoStre().setVisible(false);
+				view.getPanelReproduccion().getModoAM().setVisible(true);
+				view.getPanelReproduccion().getModoFM().setVisible(false);
+				view.getPanelReproduccion().getModoAll().setVisible(false);
+				view.getPanelReproduccion().repaint();
 
-				gui.getPanelReproduccion().repaint();
+				view.getPanelReproduccion().repaint();
 
-			} else if (gui.getPanelReproduccion().getCbbModo().getSelectedIndex() == 1) {
-				gui.imprimirMensaje("ForestM Trasmitiendo en frecuencia FM", "Modo transmisión");
+			} else if (view.getPanelReproduccion().getCbbModo().getSelectedIndex() == 1) {
+				view.imprimirMensaje("ForestM Trasmitiendo en frecuencia FM", "Modo transmisión");
 
-				gui.getPanelReproduccion().getModoStre().setVisible(false);
-				gui.getPanelReproduccion().getModoAM().setVisible(false);
-				gui.getPanelReproduccion().getModoFM().setVisible(true);
-				gui.getPanelReproduccion().getModoAll().setVisible(false);
-				gui.getPanelReproduccion().repaint();
-				gui.getPanelReproduccion().repaint();
+				view.getPanelReproduccion().getModoStre().setVisible(false);
+				view.getPanelReproduccion().getModoAM().setVisible(false);
+				view.getPanelReproduccion().getModoFM().setVisible(true);
+				view.getPanelReproduccion().getModoAll().setVisible(false);
+				view.getPanelReproduccion().repaint();
+				view.getPanelReproduccion().repaint();
 
-			} else if (gui.getPanelReproduccion().getCbbModo().getSelectedIndex() == 2) {
+			} else if (view.getPanelReproduccion().getCbbModo().getSelectedIndex() == 2) {
 
-				gui.imprimirMensaje("ForestM Tansmitiendo en Streaming :)", "Modo transmisión");
+				view.imprimirMensaje("ForestM Tansmitiendo en Streaming :)", "Modo transmisión");
 
-				gui.getPanelReproduccion().getModoAll().setVisible(false);
-				gui.getPanelReproduccion().getModoAM().setVisible(false);
-				gui.getPanelReproduccion().getModoFM().setVisible(false);
-				gui.getPanelReproduccion().getModoStre().setVisible(true);
-				gui.getPanelReproduccion().repaint();
+				view.getPanelReproduccion().getModoAll().setVisible(false);
+				view.getPanelReproduccion().getModoAM().setVisible(false);
+				view.getPanelReproduccion().getModoFM().setVisible(false);
+				view.getPanelReproduccion().getModoStre().setVisible(true);
+				view.getPanelReproduccion().repaint();
 
-			} else if (gui.getPanelReproduccion().getCbbModo().getSelectedIndex() == 3) {
-				gui.imprimirMensaje("ForestM Tansmitiendo trasmitiendo en todas las frecuencias y en streaming",
+			} else if (view.getPanelReproduccion().getCbbModo().getSelectedIndex() == 3) {
+				view.imprimirMensaje("ForestM Tansmitiendo trasmitiendo en todas las frecuencias y en streaming",
 						"Modo transmisión");
 
-				gui.getPanelReproduccion().getModoStre().setVisible(false);
-				gui.getPanelReproduccion().getModoAM().setVisible(false);
-				gui.getPanelReproduccion().getModoFM().setVisible(false);
-				gui.getPanelReproduccion().getModoAll().setVisible(true);
-				gui.getPanelReproduccion().repaint();
+				view.getPanelReproduccion().getModoStre().setVisible(false);
+				view.getPanelReproduccion().getModoAM().setVisible(false);
+				view.getPanelReproduccion().getModoFM().setVisible(false);
+				view.getPanelReproduccion().getModoAll().setVisible(true);
+				view.getPanelReproduccion().repaint();
 
-				gui.getPanelReproduccion().repaint();
+				view.getPanelReproduccion().repaint();
 
 			}
 
 			// ACCION BOTON CREAR
 
-		} else if (command.contentEquals(gui.getPanelReproduccion().Crear)) {
+		} else if (command.contentEquals(view.getPanelReproduccion().Crear)) {
 
-			if (gui.getPanelReproduccion().getRadDJ().isSelected()) {
-				String name = gui.pedirDato("Ingrese el nombre del nuevo DJ de la emisora ForrestM", "Nuevo DJ");
+			if (view.getPanelReproduccion().getRadDJ().isSelected()) {
+				String name = view.pedirDato("Ingrese el nombre del nuevo DJ de la emisora ForrestM", "Nuevo DJ");
 				try {
 					if (name.length() > 4) {
 
 						emisora.getDjs().add(new Dj(emisora.getDjs().size() + "; " + name)); // CREA UN NUEVO DJ
 						cargarDjs();
 					} else {
-						gui.imprimirMensaje("El nombre del DJ es muy corto por favor intenta de nuevo :) ", "Error");
+						view.imprimirMensaje("El nombre del DJ es muy corto por favor intenta de nuevo :) ", "Error");
 					}
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 
 				}
 
-			} else if (gui.getPanelReproduccion().getRadPa().isSelected()) {
+			} else if (view.getPanelReproduccion().getRadPa().isSelected()) {
 
-				String nombre = gui.pedirDato("Ingrese el nombre de la nueva parrilla", "Nueva parrilla");
-				int inxDj = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
+				String nombre = view.pedirDato("Ingrese el nombre de la nueva parrilla", "Nueva parrilla");
+				int inxDj = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
 
 				emisora.getDjs().get(inxDj).getParrrillas().add(new Parrilla(nombre));
 
 				cargarParrillas(inxDj);
 
-			} else if (gui.getPanelReproduccion().getRadCa().isSelected()) {
+			} else if (view.getPanelReproduccion().getRadCa().isSelected()) {
 
-				if (gui.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
-						&& gui.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0) {
+				if (view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
+						&& view.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0) {
 
-					Ndj = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
-					NPar = gui.getPanelReproduccion().getLstParrillas().getSelectedIndex();
+					Ndj = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
+					NPar = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
 					emisora.getDjs().get(Ndj).getParrrillas().get(NPar).insertarCanciones(ruta); // ENVIA LA RUTA
 																									// INICIAL
-					cargarCanciones(gui.getPanelReproduccion().getLstDJs().getSelectedIndex(),
-							gui.getPanelReproduccion().getLstParrillas().getSelectedIndex());
+					cargarCanciones(view.getPanelReproduccion().getLstDJs().getSelectedIndex(),
+							view.getPanelReproduccion().getLstParrillas().getSelectedIndex());
 				} else {
-					JOptionPane.showMessageDialog(gui.getPanelReproduccion(),
-							"No seleccionÃ³ DJ y Parrilla para agregar canciÃ³n!");
+					JOptionPane.showMessageDialog(view.getPanelReproduccion(),
+							"No seleccionó DJ y Parrilla para agregar canción!");
 				}
 
 			}
 
 			// ACCION BOTON BORRAR
-		} else if (command.contentEquals(gui.getPanelReproduccion().Borrar)) {
+		} else if (command.contentEquals(view.getPanelReproduccion().Borrar)) {
 
-			if (gui.getPanelReproduccion().getRadDJ().isSelected()) {
+			if (view.getPanelReproduccion().getRadDJ().isSelected()) {
 
-				int a = Integer.parseInt(gui.pedirDato(
+				int a = Integer.parseInt(view.pedirDato(
 						"Ingrese el número del dj que quiere borrar (siendo el primer nombre la posicion 0): ",
 						"Borrar Dj"));
 				emisora.getDjs().remove(a);
 
 				cargarDjs();
 
-			} else if (gui.getPanelReproduccion().getRadPa().isSelected()
-					&& gui.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
-					&& gui.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0) {
+			} else if (view.getPanelReproduccion().getRadPa().isSelected()
+					&& view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
+					&& view.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0) {
 
-				int a = JOptionPane.showConfirmDialog(gui, "Esta Seguro que desea borrar el Parrilla seleccionada ?");
+				int a = JOptionPane.showConfirmDialog(view, "Esta Seguro que desea borrar el Parrilla seleccionada ?");
 				if (a == JOptionPane.YES_OPTION) {
-					emisora.getDjs().get(gui.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
-							.remove(gui.getPanelReproduccion().getLstParrillas().getSelectedIndex());
-					cargarParrillas(gui.getPanelReproduccion().getLstDJs().getSelectedIndex());
+					emisora.getDjs().get(view.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
+							.remove(view.getPanelReproduccion().getLstParrillas().getSelectedIndex());
+					cargarParrillas(view.getPanelReproduccion().getLstDJs().getSelectedIndex());
 				}
-			} else if (gui.getPanelReproduccion().getRadCa().isSelected()
-					&& gui.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
-					&& gui.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0
-					&& gui.getPanelReproduccion().getLstCanciones().getSelectedIndex() >= 0) {
+			} else if (view.getPanelReproduccion().getRadCa().isSelected()
+					&& view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
+					&& view.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0
+					&& view.getPanelReproduccion().getLstCanciones().getSelectedIndex() >= 0) {
 
-				int a = JOptionPane.showConfirmDialog(gui.getPanelReproduccion(),
+				int a = JOptionPane.showConfirmDialog(view.getPanelReproduccion(),
 						"Esta seguro que desea remover la cancion de la parrilla ForrestM seleccionada?");
 				if (a == JOptionPane.YES_OPTION)
-					emisora.getDjs().get(gui.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
-							.get(gui.getPanelReproduccion().getLstParrillas().getSelectedIndex()).getCanciones()
-							.remove(gui.getPanelReproduccion().getLstCanciones().getSelectedIndex());
-				cargarCanciones(gui.getPanelReproduccion().getLstDJs().getSelectedIndex(),
-						gui.getPanelReproduccion().getLstParrillas().getSelectedIndex());
+					emisora.getDjs().get(view.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
+							.get(view.getPanelReproduccion().getLstParrillas().getSelectedIndex()).getCanciones()
+							.remove(view.getPanelReproduccion().getLstCanciones().getSelectedIndex());
+				cargarCanciones(view.getPanelReproduccion().getLstDJs().getSelectedIndex(),
+						view.getPanelReproduccion().getLstParrillas().getSelectedIndex());
 			}
 
 			// ACCION DEL COMANDO EDITAR
 
-		} else if (command.contentEquals(gui.getPanelReproduccion().Editar)) {
+		} else if (command.contentEquals(view.getPanelReproduccion().Editar)) {
 
-			if (gui.getPanelReproduccion().getRadDJ().isSelected()) {
-				String name = gui.pedirDato(
-						"Modifique el nombre del DJ " + gui.getPanelReproduccion().getLstDJs().getSelectedValue(),
+			if (view.getPanelReproduccion().getRadDJ().isSelected()) {
+				String name = view.pedirDato(
+						"Modifique el nombre del DJ " + view.getPanelReproduccion().getLstDJs().getSelectedValue(),
 						"Editar Dj");
 
-				emisora.getDjs().get(gui.getPanelReproduccion().getLstDJs().getSelectedIndex()).setNombre(name); // METODO
+				emisora.getDjs().get(view.getPanelReproduccion().getLstDJs().getSelectedIndex()).setNombre(name); // METODO
 																													// ABSTRACTO
 				cargarDjs();
 
-			} else if (gui.getPanelReproduccion().getRadPa().isSelected()) {
+			} else if (view.getPanelReproduccion().getRadPa().isSelected()) {
 
-				String name = gui.pedirDato(
+				String name = view.pedirDato(
 						"Modifique el nombre de la parrilla "
-								+ gui.getPanelReproduccion().getLstParrillas().getSelectedValue(),
+								+ view.getPanelReproduccion().getLstParrillas().getSelectedValue(),
 						"Modificar parrillas");
 
-				emisora.getDjs().get(gui.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
-						.get(gui.getPanelReproduccion().getLstParrillas().getSelectedIndex()).setNombre(name);
+				emisora.getDjs().get(view.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
+						.get(view.getPanelReproduccion().getLstParrillas().getSelectedIndex()).setNombre(name);
 
-				cargarParrillas(gui.getPanelReproduccion().getLstDJs().getSelectedIndex());
+				cargarParrillas(view.getPanelReproduccion().getLstDJs().getSelectedIndex());
 
-			} else if (gui.getPanelReproduccion().getRadCa().isSelected()) {
+			} else if (view.getPanelReproduccion().getRadCa().isSelected()) {
 
-				String nombre = gui.pedirDato("Ingrese dato del nuevo nombre de la canción: ",
+				String nombre = view.pedirDato("Ingrese dato del nuevo nombre de la canción: ",
 						"Cambio de nombre canción");
-				int indxDjs = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
-				int indxPa = gui.getPanelReproduccion().getLstParrillas().getSelectedIndex();
-				int indxCa = gui.getPanelReproduccion().getLstCanciones().getSelectedIndex();
+				int indxDjs = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
+				int indxPa = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
+				int indxCa = view.getPanelReproduccion().getLstCanciones().getSelectedIndex();
 
 				emisora.getDjs().get(indxDjs).getParrrillas().get(indxPa).getCanciones().get(indxCa).setTitulo(nombre);
 
@@ -393,7 +393,7 @@ public class Controller implements ActionListener, Reproductor {
 
 			// ACION A EJECUTAR BOTON PLAY
 
-		} else if (command.contentEquals(gui.getPanelReproduccion().Play))
+		} else if (command.contentEquals(view.getPanelReproduccion().Play))
 
 		{
 			stop = true;
@@ -403,57 +403,57 @@ public class Controller implements ActionListener, Reproductor {
 			} catch (Exception e2) {
 			}
 
-			Ndj = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
-			NPar = gui.getPanelReproduccion().getLstParrillas().getSelectedIndex();
-			NCan = gui.getPanelReproduccion().getLstCanciones().getSelectedIndex();
+			Ndj = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
+			NPar = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
+			NCan = view.getPanelReproduccion().getLstCanciones().getSelectedIndex();
 			if (Ndj >= 0 && NPar >= 0 && NCan >= 0) {
 				stop = false;
 				reproducir();
 			}
 
 			// ACCION SIGUIENTE DEL BOTON
-		} else if (command.contentEquals(gui.getPanelReproduccion().Next)) {
+		} else if (command.contentEquals(view.getPanelReproduccion().Next)) {
 
 			// REPRODUCIR LISTA
-			Ndj = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
-			NPar = gui.getPanelReproduccion().getLstParrillas().getSelectedIndex();
+			Ndj = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
+			NPar = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
 			if (Ndj >= 0 && NPar >= 0) {
 				stop = true;
 				siguiente();
 			}
 			// ACCION DETENER EL BOTON
-		} else if (command.contentEquals(gui.getPanelReproduccion().Stop)) {
+		} else if (command.contentEquals(view.getPanelReproduccion().Stop)) {
 			stop = true;
 			detener();
 
-		} else if (command.contentEquals(gui.getPanelReproduccion().Subir)) {
-			if (gui.getPanelReproduccion().getRadDJ().isSelected()
-					&& gui.getPanelReproduccion().getLstDJs().getSelectedIndex() > 0) {
-				int i = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
+		} else if (command.contentEquals(view.getPanelReproduccion().Subir)) {
+			if (view.getPanelReproduccion().getRadDJ().isSelected()
+					&& view.getPanelReproduccion().getLstDJs().getSelectedIndex() > 0) {
+				int i = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
 				Dj temp = emisora.getDjs().get(i); // INTERCAMBIA POSICIONES
 				emisora.getDjs().set(i, emisora.getDjs().get(i - 1));
 				emisora.getDjs().set(i - 1, temp);
 				cargarDjs(); // ACTUALIZAR
 
-			} else if (gui.getPanelReproduccion().getRadPa().isSelected()
-					&& gui.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
-					&& gui.getPanelReproduccion().getLstParrillas().getSelectedIndex() > 0) {
+			} else if (view.getPanelReproduccion().getRadPa().isSelected()
+					&& view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
+					&& view.getPanelReproduccion().getLstParrillas().getSelectedIndex() > 0) {
 
-				int i = gui.getPanelReproduccion().getLstParrillas().getSelectedIndex();
-				int j = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
+				int i = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
+				int j = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
 				Parrilla temp = emisora.getDjs().get(j).getParrrillas().get(i); // INTERCAMBIA POSICIONES
 				emisora.getDjs().get(j).getParrrillas().set(i, emisora.getDjs().get(j).getParrrillas().get(i - 1));
 				emisora.getDjs().get(j).getParrrillas().set(i - 1, temp);
 				cargarParrillas(j); // ACTUALIZAR
 
-			} else if (gui.getPanelReproduccion().getRadCa().isSelected()
-					&& gui.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
-					&& gui.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0
-					&& gui.getPanelReproduccion().getLstCanciones().getSelectedIndex() > 0) {
+			} else if (view.getPanelReproduccion().getRadCa().isSelected()
+					&& view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
+					&& view.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0
+					&& view.getPanelReproduccion().getLstCanciones().getSelectedIndex() > 0) {
 
-				int i = gui.getPanelReproduccion().getLstCanciones().getSelectedIndex();
-				int j = gui.getPanelReproduccion().getLstParrillas().getSelectedIndex();
-				int k = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
+				int i = view.getPanelReproduccion().getLstCanciones().getSelectedIndex();
+				int j = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
+				int k = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
 				Song temp = emisora.getDjs().get(k).getParrrillas().get(j).getCanciones().get(i); // INTERCAMBIO DE
 																									// POSICIONES
 				emisora.getDjs().get(k).getParrrillas().get(j).getCanciones().set(i,
@@ -462,35 +462,35 @@ public class Controller implements ActionListener, Reproductor {
 				cargarCanciones(k, j); // ACTUALIZAR
 
 			}
-		} else if (command.contentEquals(gui.getPanelReproduccion().Bajar)) {
-			if (gui.getPanelReproduccion().getRadDJ().isSelected()
-					&& gui.getPanelReproduccion().getLstDJs().getSelectedIndex() < emisora.getDjs().size() - 1) {
-				int i = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
+		} else if (command.contentEquals(view.getPanelReproduccion().Bajar)) {
+			if (view.getPanelReproduccion().getRadDJ().isSelected()
+					&& view.getPanelReproduccion().getLstDJs().getSelectedIndex() < emisora.getDjs().size() - 1) {
+				int i = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
 				Dj temp = emisora.getDjs().get(i); // INTERCAMBIA POSICIONES
 				emisora.getDjs().set(i, emisora.getDjs().get(i + 1));
 				emisora.getDjs().set(i + 1, temp);
 				cargarDjs(); // ACTUALIZAR
 			}
-			if (gui.getPanelReproduccion().getRadPa().isSelected()
-					&& gui.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
-					&& gui.getPanelReproduccion().getLstParrillas().getSelectedIndex() < gui.getPanelReproduccion()
+			if (view.getPanelReproduccion().getRadPa().isSelected()
+					&& view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
+					&& view.getPanelReproduccion().getLstParrillas().getSelectedIndex() < view.getPanelReproduccion()
 							.getLstParrillas().getModel().getSize() - 1) {
 
-				int i = gui.getPanelReproduccion().getLstParrillas().getSelectedIndex();
-				int j = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
+				int i = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
+				int j = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
 				Parrilla temp = emisora.getDjs().get(j).getParrrillas().get(i); // INTERCAMBIA POSICIONES
 				emisora.getDjs().get(j).getParrrillas().set(i, emisora.getDjs().get(j).getParrrillas().get(i + 1));
 				emisora.getDjs().get(j).getParrrillas().set(i + 1, temp);
 				cargarParrillas(j); // ACTUALIZAR
 			}
-			if (gui.getPanelReproduccion().getRadCa().isSelected()
-					&& gui.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
-					&& gui.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0
-					&& gui.getPanelReproduccion().getLstCanciones().getSelectedIndex() < gui.getPanelReproduccion()
+			if (view.getPanelReproduccion().getRadCa().isSelected()
+					&& view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0
+					&& view.getPanelReproduccion().getLstParrillas().getSelectedIndex() >= 0
+					&& view.getPanelReproduccion().getLstCanciones().getSelectedIndex() < view.getPanelReproduccion()
 							.getLstCanciones().getModel().getSize() - 1) {
-				int i = gui.getPanelReproduccion().getLstCanciones().getSelectedIndex();
-				int j = gui.getPanelReproduccion().getLstParrillas().getSelectedIndex();
-				int k = gui.getPanelReproduccion().getLstDJs().getSelectedIndex();
+				int i = view.getPanelReproduccion().getLstCanciones().getSelectedIndex();
+				int j = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
+				int k = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
 				Song temp = emisora.getDjs().get(k).getParrrillas().get(j).getCanciones().get(i); // INTERCAMBIA
 																									// POSICIONES
 				emisora.getDjs().get(k).getParrrillas().get(j).getCanciones().set(i,
@@ -507,9 +507,9 @@ public class Controller implements ActionListener, Reproductor {
 	public void reproducir() {
 		if (!play) {
 			try {
-				gui.getPanelReproduccion().getLstDJs().setSelectedIndex(Ndj);
-				gui.getPanelReproduccion().getLstParrillas().setSelectedIndex(NPar);
-				gui.getPanelReproduccion().getLstCanciones().setSelectedIndex(NCan);
+				view.getPanelReproduccion().getLstDJs().setSelectedIndex(Ndj);
+				view.getPanelReproduccion().getLstParrillas().setSelectedIndex(NPar);
+				view.getPanelReproduccion().getLstCanciones().setSelectedIndex(NCan);
 				actualizaCancion(0); // ACTUALIZA LOS DATOS DE LA CANCION
 				File cancion = new File(
 						emisora.getDjs().get(Ndj).getParrrillas().get(NPar).getCanciones().get(NCan).ruta);
@@ -531,11 +531,11 @@ public class Controller implements ActionListener, Reproductor {
 						player.play();
 						System.out.println("Cancion finalizada (hilo) :) ");
 
-						if (NCan < gui.getPanelReproduccion().getLstCanciones().getModel().getSize() - 1 && !stop) {
+						if (NCan < view.getPanelReproduccion().getLstCanciones().getModel().getSize() - 1 && !stop) {
 							NCan++;
 							cargarParrillas(Ndj);
 							cargarCanciones(Ndj, NPar);
-							gui.getPanelReproduccion().getLstCanciones().setSelectedIndex(NCan);
+							view.getPanelReproduccion().getLstCanciones().setSelectedIndex(NCan);
 							actualizaCancion(0); // ACTUALIZA LOS DATOS DE LA CANCION
 							reproducir();
 						}
