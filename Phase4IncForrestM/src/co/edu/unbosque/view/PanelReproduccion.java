@@ -14,6 +14,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 import co.edu.unbosque.model.Genre;
 
@@ -52,6 +53,7 @@ public class PanelReproduccion extends JPanel {
 		setLayout(null);
 		setVisible(true);
 		setBackground(Color.WHITE);
+		setBorder(new TitledBorder("Emisora"));
 		inicializarComponentes();
 
 	}
@@ -60,6 +62,7 @@ public class PanelReproduccion extends JPanel {
 	 * inicializa y añade todos los elementos graficos del JPanel
 	 */
 	public void inicializarComponentes() {
+
 		lblModo = new JLabel("Modo de transmisión: ");
 		lblModo.setBounds(20, 20, 150, 20);
 
@@ -1031,17 +1034,17 @@ public class PanelReproduccion extends JPanel {
 	public void setModoAM(JLabel modoAM) {
 		this.modoAM = modoAM;
 	}
+
 	/**
 	 * Obtiene el atributo modoFm de la clase PanelReproducción
 	 * 
 	 * @return JLabel modoFm
 	 */
 
-
 	public JLabel getModoFM() {
 		return modoFM;
 	}
-	
+
 	/**
 	 * Modifica el atributo modoFM de la clase PanelReproducción
 	 * 
@@ -1051,18 +1054,17 @@ public class PanelReproduccion extends JPanel {
 	public void setModoFM(JLabel modoFM) {
 		this.modoFM = modoFM;
 	}
-	
+
 	/**
 	 * Obtiene el atributo modoStre de la clase PanelReproducción
 	 * 
 	 * @return JLabel modoStre
 	 */
 
-	
-
 	public JLabel getModoStre() {
 		return modoStre;
 	}
+
 	/**
 	 * Modifica el atributo modoStre de la clase PanelReproducción
 	 * 
@@ -1072,7 +1074,7 @@ public class PanelReproduccion extends JPanel {
 	public void setModoStre(JLabel modoStre) {
 		this.modoStre = modoStre;
 	}
-	
+
 	/**
 	 * Obtiene el atributo modoAll de la clase PanelReproducción
 	 * 
@@ -1082,7 +1084,7 @@ public class PanelReproduccion extends JPanel {
 	public JLabel getModoAll() {
 		return modoAll;
 	}
-	
+
 	/**
 	 * Modifica el atributo modoAll de la clase PanelReproducción
 	 * 
@@ -1092,6 +1094,7 @@ public class PanelReproduccion extends JPanel {
 	public void setModoAll(JLabel modoAll) {
 		this.modoAll = modoAll;
 	}
+
 	/**
 	 * Obtiene el atributo imagenCan de la clase PanelReproducción
 	 * 
@@ -1101,7 +1104,7 @@ public class PanelReproduccion extends JPanel {
 	public JLabel getImagenCan() {
 		return imagenCan;
 	}
-	
+
 	/**
 	 * Modifica el atributo modoAll de la clase PanelReproducción
 	 * 

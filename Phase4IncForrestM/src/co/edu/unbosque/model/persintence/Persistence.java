@@ -72,6 +72,7 @@ public class Persistence {
 	 */
 
 	public ArrayList<String> leerDjs() {
+		
 		ArrayList<String> djs = new ArrayList<>();
 		try {
 

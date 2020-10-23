@@ -83,15 +83,16 @@ public class Controller implements ActionListener, Reproductor {
 			}
 		});
 
-		this.view.getPanelReproduccion().getLstParrillas().addMouseListener(new MouseAdapter() { // ACCION CUANDO HACE UN
-																								// CLIC
+		this.view.getPanelReproduccion().getLstParrillas().addMouseListener(new MouseAdapter() { // ACCION CUANDO HACE
+																									// UN
+																									// CLIC
 			public void mouseClicked(MouseEvent me) {
 				if (me.getClickCount() == 1) {
 					JList target = (JList) me.getSource();
 					int index = target.locationToIndex(me.getPoint());
 					if (index >= 0 && view.getPanelReproduccion().getLstDJs().getSelectedIndex() >= 0) { // CARGA LOS
-																										// DATOS
-																										// SELECCIONADOS
+																											// DATOS
+																											// SELECCIONADOS
 						cargarCanciones(view.getPanelReproduccion().getLstDJs().getSelectedIndex(), index); // ACTUALIZA
 																											// LA LISTA
 																											// DE
@@ -106,7 +107,7 @@ public class Controller implements ActionListener, Reproductor {
 
 		// ACTUALIZA DATOS DE CANCIONES
 		this.view.getPanelReproduccion().getLstCanciones().addMouseListener(new MouseAdapter() { // ACCION CUANDO HACE
-																								// CLIC
+																									// CLIC
 			public void mouseClicked(MouseEvent me) {
 				if (me.getClickCount() == 1) {
 					JList target = (JList) me.getSource();
@@ -378,20 +379,50 @@ public class Controller implements ActionListener, Reproductor {
 
 				cargarParrillas(view.getPanelReproduccion().getLstDJs().getSelectedIndex());
 
-			} else if (view.getPanelReproduccion().getRadCa().isSelected()) {
+			} else if (view.getPanelReproduccion().getRadCa().isSelected()&& view.getPanelReproduccion().getLstCanciones().getSelectedIndex() > 0 ) {
 
-				String nombre = view.pedirDato("Ingrese dato del nuevo nombre de la canción: ",
-						"Cambio de nombre canción");
-				int indxDjs = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
-				int indxPa = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
-				int indxCa = view.getPanelReproduccion().getLstCanciones().getSelectedIndex();
+			
+				view.getFrameDatos().setVisible(true);
 
-				emisora.getDjs().get(indxDjs).getParrrillas().get(indxPa).getCanciones().get(indxCa).setTitulo(nombre);
-
-				cargarCanciones(indxDjs, indxPa);
+			}else {
+				view.imprimirMensaje("Señor usuario seleccione una canción para poder modificarla", "Error");
 			}
 
 			// ACION A EJECUTAR BOTON PLAY
+
+		} else if (command.contentEquals(view.getFrameDatos().Save)) {
+
+			String artista = view.getFrameDatos().getTxta().getText();
+			String titulo = view.getFrameDatos().getTxttit().getText();
+			
+
+			if (titulo.contentEquals("") && artista.contentEquals("") ) {
+				view.imprimirMensaje("Por favor llene toodos los valores", "Error");
+			} else {
+
+				emisora.getDjs().get(view.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
+						.get(view.getPanelReproduccion().getLstParrillas().getSelectedIndex()).getCanciones()
+						.get(view.getPanelReproduccion().getLstCanciones().getSelectedIndex()).getArtista()
+						.setNombre(artista);
+
+				emisora.getDjs().get(view.getPanelReproduccion().getLstDJs().getSelectedIndex()).getParrrillas()
+						.get(view.getPanelReproduccion().getLstParrillas().getSelectedIndex()).getCanciones()
+						.get(view.getPanelReproduccion().getLstCanciones().getSelectedIndex()).setTitulo(titulo);
+				
+
+				view.imprimirMensaje("Los datos se han guardado exitosamente ", "Datos guardados con exito ");
+
+				actualizaCancion(view.getPanelReproduccion().getLstCanciones().getSelectedIndex());
+				
+				view.getPanelReproduccion().getLstCanciones().repaint();
+				
+				view.getFrameDatos().getTxta().setText("");
+				view.getFrameDatos().getTxttit().setText("");
+		
+
+				view.getFrameDatos().setVisible(false);
+
+			}
 
 		} else if (command.contentEquals(view.getPanelReproduccion().Play))
 
@@ -406,6 +437,7 @@ public class Controller implements ActionListener, Reproductor {
 			Ndj = view.getPanelReproduccion().getLstDJs().getSelectedIndex();
 			NPar = view.getPanelReproduccion().getLstParrillas().getSelectedIndex();
 			NCan = view.getPanelReproduccion().getLstCanciones().getSelectedIndex();
+
 			if (Ndj >= 0 && NPar >= 0 && NCan >= 0) {
 				stop = false;
 				reproducir();
@@ -519,7 +551,7 @@ public class Controller implements ActionListener, Reproductor {
 				play = true;
 			} catch (Exception e) {
 				System.out.println(
-						"Problema reproduciendo la canción! :(  Valida la ruta del archivo mp3 o que el archivo mp3 no este corrupto ");
+						"Problema reproduciendo la canción! :(  Va lida la ruta del archivo mp3 o que el archivo mp3 no este corrupto ");
 				stop = true;
 
 			}
@@ -549,6 +581,8 @@ public class Controller implements ActionListener, Reproductor {
 				play = false;
 				reproducir();
 			} catch (Exception e) {
+
+				System.out.println("Se acabo la reproducción");
 			}
 		}
 

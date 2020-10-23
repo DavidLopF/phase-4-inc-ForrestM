@@ -16,7 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *         Gomez
  *
  */
-public class Parrilla extends PlayList {
+public class Parrilla  {
 
 	private String nombre;
 	private ArrayList<Song> canciones;
